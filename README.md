@@ -17,7 +17,7 @@ Follow these steps to set up and run the project locally:
 Make sure you have the following installed on your machine:
 - [Node.js](https://nodejs.org/) (v16 or higher recommended)
 - npm (Node Package Manager)
-- **React version must be 18* (not latest for redux compatibility)**
+- __React version must be 18* (not latest for redux compatibility)__
 
 ### Getting Started
 
