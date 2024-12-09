@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
+import MovieHeader from './MovieHeader';
+import { BlinkBlur } from "react-loading-indicators";
 
 interface MovieDetailsTypes {
     Poster: string;
@@ -30,29 +32,26 @@ const MovieDetails = () => {
         const responseJson = await response.json();
         if (responseJson) {
             setMovieDetails(responseJson);
-            console.log(responseJson)
         }
-    }, [id]); // Include `id` as a dependency
+    }, [id]); // Included "id" as a dependency
 
     useEffect(() => {
         getMovieDetails();
-    }, [getMovieDetails])
-
-    if (!movieDetails) {
-        return <div>Loading...</div>;
-    }
+    }, [getMovieDetails]) // Also, included "getMovieDetails" as a dependency
 
     return (
         <div className="movie-details-page">
-            <h1>Movie Details</h1>
+            <MovieHeader header="Movie Content" />
+            <hr />
+            {movieDetails ? 
             <div className="container">
-                <hr />
                 <div className="movie-details-container">
                     <div className="movie-poster">
                         <img src={movieDetails.Poster} alt={`${movieDetails.Title} Poster`} />
                         <Link to="/" className="btn btn-primary">Return to Home</Link>
                     </div>
                     <div className="movie-info">
+                        {/* N/A is default return value from OMDB Api, but sometimes it returns null */}
                         <h2>{movieDetails.Title || "N/A"}</h2>
                         <p><strong>Duration:</strong> {movieDetails.Runtime || "N/A"}</p>
                         <p><strong>Genre:</strong> {movieDetails.Genre || "N/A"}</p>
@@ -70,6 +69,7 @@ const MovieDetails = () => {
                     </div>
                 </div>
             </div>
+            : <BlinkBlur color="#32cd32" size="medium" text="Loading Data" textColor="" />}
         </div>
     );
 };
