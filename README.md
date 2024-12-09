@@ -28,10 +28,12 @@ Make sure you have the following installed on your machine:
 2. **Install dependencies: Run the following command to install all necessary dependencies:**
    ```bash
    npm install --legacy-peer-deps
+   
    This flag will bypass strict peer dependency checks, preventing installation errors.
 3. **Run the development server:** Start the application using:
    ```bash
    npm start
+   
    This will run the application on http://localhost:3000 in your default browser.
 
 ### Troubleshooting
