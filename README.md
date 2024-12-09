@@ -7,6 +7,7 @@ This is a **Movie Search Application** built with React, Redux Toolkit, and Type
 - Search movies by name, year, and type (e.g., movie, series, episode).
 - Fetch additional pages for more results using pagination.
 - Error handling for API responses and loading states.
+- While using the application, if anything goes wrong, you can get help from __https://www.omdbapi.com/__ about the limitations.
 
 ## Installation
 
