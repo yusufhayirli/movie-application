@@ -43,3 +43,4 @@ This will run the application on http://localhost:3000 in your default browser.
 - Deprecation Warnings: If you see warnings related to Sass or other libraries, update your dependencies to the latest compatible versions.
 - Unsupported Engine Errors: Ensure that your Node.js version matches the requirements specified in the package.json file.
 - Peer Dependency Issues: Always use __npm install --legacy-peer-deps__ to avoid peer dependency conflicts.
+- If npm install throws error, try __npm install --force__ to install dependencies.
