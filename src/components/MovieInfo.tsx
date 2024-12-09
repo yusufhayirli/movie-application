@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -10,21 +10,18 @@ interface Props {
     Year: string;
     imdbID: string;
   }>;
+  onPageChange: Function;
+  currentPage: number;
+  totalResults: number;
 }
 
-const MovieInfo = ({ movies }: Props) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const MovieInfo = ({ movies, onPageChange, currentPage, totalResults}: Props) => {
   const itemsPerPage = 10;
+  const totalPages = Math.round(totalResults / 10) ;
 
-  const totalPages = Math.ceil(movies.length / itemsPerPage);
-
-  const currentMovies = movies.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
+    onPageChange(page);
   };
 
   return (
@@ -40,7 +37,7 @@ const MovieInfo = ({ movies }: Props) => {
           </tr>
         </thead>
         <tbody className="movie-table-body">
-          {currentMovies.map((movie, i) => (
+          {movies.map((movie, i) => (
             <tr className="movie-row" key={movie.imdbID}>
               <th scope="row">{(currentPage - 1) * itemsPerPage + i + 1}</th>
               <td>

@@ -41,7 +41,7 @@ const MovieDetails = () => {
 
     return (
         <div className="movie-details-page">
-            <MovieHeader header="Movie Content" />
+            <MovieHeader header="Movie Details" />
             <hr />
             {movieDetails ? 
             <div className="container">

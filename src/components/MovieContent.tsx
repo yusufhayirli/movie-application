@@ -1,68 +1,71 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMoviesStart, fetchMoviesSuccess, fetchMoviesFailure } from '../redux/movieSlice';
+import { RootState } from '../redux/store';
 import MovieInfo from './MovieInfo';
-import MovieFilterBar from "./MovieFilterBar";
-import MovieHeader from './MovieHeader';
 import { BlinkBlur } from "react-loading-indicators";
+import Alert from '@mui/material/Alert';
 
-interface Movie {
-  Poster: string;
-  Title: string;
-  Year: string;
-  imdbID: string;
-}
+const MovieContent: React.FC = () => {
+  const dispatch = useDispatch();
 
-const OnePageMovieApp = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [searchByName, setSearchByName] = useState("Pokemon");
-  const [searchByYear, setSearchByYear] = useState("");
-  const [filterByType, setFilterByType] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // Access the Redux store data
+  const { 
+    movies,
+    totalResults,
+    apiKey, 
+    searchByName, 
+    searchByYear, 
+    isLoading,
+    isFailed,
+    error
+  } = useSelector((state: RootState) => state.movies);
 
-  const getListAPI = async (searchByName: string, searchByYear: string, filterByType: string) => {
-    let index = 1;
-    let moreResults = true;
-    let fetchedMovies: Movie[] = [];
+  const filterByType = useSelector((state: RootState) => state.movies.filterByType);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    while (moreResults) {
-      const url = `http://www.omdbapi.com/?s=${searchByName}&y=${searchByYear}&type=${filterByType}&plot=full&page=${index}&apikey=2c2300cd`;
-
-      const response = await fetch(url);
-      const responseJson = await response.json();
-
-      if (responseJson.Search) {
-        fetchedMovies = [...fetchedMovies, ...responseJson.Search];
-        index++;
+  // Fetch movies with an API call
+  const fetchMovies = async (pageNumber?: number) => {
+    dispatch(fetchMoviesStart());
+    try {
+      let url = "";
+      if (pageNumber) {
+        url = `http://www.omdbapi.com/?s=${searchByName}&y=${searchByYear}&page=${pageNumber}&type=${filterByType}&plot=full&apikey=${apiKey}`;
+        setCurrentPage(pageNumber);
       } else {
-        moreResults = false;
+        url = `http://www.omdbapi.com/?s=${searchByName}&y=${searchByYear}&type=${filterByType}&plot=full&apikey=${apiKey}`;
+        setCurrentPage(1);
       }
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.Search) {
+        dispatch(fetchMoviesSuccess(data));
+      } else {
+        dispatch(fetchMoviesFailure('No movies found.'));
+      }
+    } catch (error) {
+      dispatch(fetchMoviesFailure('Failed to fetch movies.'));
     }
-    setMovies(fetchedMovies);
-    setIsLoading(false);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    getListAPI(searchByName, searchByYear, filterByType);
-  }, [searchByName, searchByYear, filterByType])
+    fetchMovies();
+  }, [searchByName, searchByYear, filterByType]);
 
   return (
-    <div className="container home-page">
-      <MovieHeader header="Single Page Movie Application" />
-      <hr />
-      <MovieFilterBar 
-        searchByName = {searchByName}
-        setSearchByName = {setSearchByName}
-        searchByYear = {searchByYear}
-        setSearchByYear = {setSearchByYear}
-        filterByType = {filterByType}
-        setFilterByType = {setFilterByType}
-      />
-      <div className='row'>
-        {isLoading ? <p><BlinkBlur color="#32cd32" size="medium" text="Loading Data" textColor="" /></p> : null}
-        <MovieInfo movies = {movies}/>
-      </div>
+    <div className="movie-content container">
+      {isLoading ? <BlinkBlur color="#32cd32" size="medium" text="Loading Data" textColor="" />
+      :
+      <>
+        {isFailed ? 
+          <Alert severity="error">{error}</Alert> 
+          :
+          <MovieInfo totalResults={totalResults} currentPage={currentPage} onPageChange={fetchMovies} movies={movies} />
+        }
+      </>
+      }
     </div>
   );
-}
+};
 
-export default OnePageMovieApp;
+export default MovieContent;

@@ -1,5 +1,9 @@
-$blackColor: #1A1A1A;
+$black: #1A1A1A;
+$darkGrey: #333;
 
+.App {
+  margin: 2rem 0;
+}
 
 .movie-header {
   flex-direction: column;
@@ -30,7 +34,7 @@ $blackColor: #1A1A1A;
 
   a {
     text-decoration: none;
-    color: $blackColor;
+    color: $black;
   }
 }
 
@@ -84,17 +88,22 @@ th, td {
 
       strong {
         font-weight: bold;
-        color: #333;
+        color: $darkGrey;
       }
     }
   }
 }
 
-.home-page, .movie-details-page {
+.movie-header {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
 .pagination-container {
   align-items: center;
+}
+
+.MuiAlert-standardError {
+  display: flex;
+  place-self: center;
 }
