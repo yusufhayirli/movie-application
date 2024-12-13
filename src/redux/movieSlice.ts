@@ -29,7 +29,7 @@ interface MovieState {
 const initialState: MovieState = {
     movies: [],
     totalResults: 0,
-    apiKey: '2c2300cd',
+    apiKey: '2c2300cd', // add your own api key in case if it is expired.
     isLoading: false,
     error: null,
     searchByName: 'Pokemon',

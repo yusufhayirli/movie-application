@@ -45,3 +45,4 @@ This will run the application on http://localhost:3000 in your default browser.
 - Unsupported Engine Errors: Ensure that your Node.js version matches the requirements specified in the package.json file.
 - Peer Dependency Issues: Always use __npm install --legacy-peer-deps__ to avoid peer dependency conflicts.
 - If npm install throws error, try __npm install --force__ to install dependencies.
+- If having __"No API key provided."__ error, please check __./redux/movieSlice.ts__ and change the api key with your own. (*It might be expired.*)
